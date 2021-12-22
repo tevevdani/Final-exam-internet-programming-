@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Zadaca 5</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+<body class="col">
+<br />
+<h3>Zadaca 5</h3>
+<br />
+    <form id="callDB" class="col-md-12">
+      <div class="row">        
+          <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">New Student</h5>                
+                <p class="card-text">Add new student data in the list</p>
+                <div class="col col-md-4">
+
+                    <div class="form-group">
+                        <label for="title">First Name</label>
+                        <input type="text" class="form-control" id="firstName" aria-describedby="titleHelp" placeholder="First Name" required>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" aria-describedby="titleHelp" placeholder="Last Name" required>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Student Id</label>
+                        <input type="text" class="form-control" id="studentId" aria-describedby="titleHelp" placeholder="Student Id" required>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="title">E-mail</label>
+                        <input type="text" class="form-control" id="email" aria-describedby="titleHelp" placeholder="Email address" required>                        
+                    </div>                                        
+
+                    <input type="button" value="POST" id="btnPost" class="btn btn-warning">
+                </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </form>
+    <br>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">name</th>
+                <th scope="col">username</th>
+                <th scope="col">email</th>
+                <th scope="col">phone</th>
+                <th scope="col">website</th>
+            </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+    </table>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous" ></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" ></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.js">
+</script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqBootstrapValidation/1.3.7/jqBootstrapValidation.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+      toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": false,
+          "progressBar": true,
+          "positionClass": "toast-bottom-full-width",
+          "preventDuplicates": false,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+      };
+       
+
+    $('#btnPost').click(function () {
+      debugger
+        $.ajax({
+            type: 'POST',
+            url: 'https://ip-uacs.herokuapp.com/api/student',
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: {   id: $('#id').val(),
+                      firstName: $('#firstName').val(),
+                      lastName: $('#lastName').val(),
+                      studentId: $('#studentId').val(),
+                      email: $('#email').val(),
+                      createdDate: $('#createdDate').val()
+                    },
+            success: function (data) {
+              debugger
+                toastr["success"]('Data Inserted');
+                console.log(data);
+                $('#tblBody').empty();
+
+                var content = '<tr>';  
+                content += '<td>' + data.id + '</td>';             
+                content += '<td>' + data.firstName + '</td>';
+                content += '<td>' + data.lastName + '</td>';
+                content += '<td>' + data.studentId + '</td>';
+                content += '<td>' + data.email + '</td>';
+                content += '<td>' + data.createdDate + '</td>';
+                content += '</tr>';
+
+                $('#tblBody').append(content);
+            },
+            error: function (response) {
+              debugger
+                toastr["error"](response.responseText);
+                console.log(response);
+            },
+        });
+    });
+});    
+</script>
+</html>
